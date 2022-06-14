@@ -7,6 +7,7 @@ import motion_overlap as overlap
 
 np.set_printoptions(precision=3)  # numpy settings
 np.set_printoptions(suppress=True)
+print("")
 
 
 C = 2.99792458 * 10**8  # Speed of light
