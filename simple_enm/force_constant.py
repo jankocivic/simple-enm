@@ -5,8 +5,9 @@ import numpy as np
 
 
 def k_with_cutoff(distance_matrix, cutoff=12):
-    """Creates a matrix of force constants (k) between residues based on the distance matrix.
-    The force constant equals to 1 for residues closer than the cutoff and 0 otherwise.
+    """Creates a matrix of force constants (k) between residues based on the
+    distance matrix. The force constant equals to 1 for residues closer than the
+    cutoff and 0 otherwise.
 
     :param distance_matrix: matrix of distances between the residues
     :param cutoff: the cutoff distance for the force constants in Angstrems

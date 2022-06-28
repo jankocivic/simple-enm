@@ -4,6 +4,7 @@ Contains functions for performing normal mode analysis
 import numpy as np
 import pdb_tools as pdb
 import force_constant
+import temperature_factors
 
 
 def build_coordinate_matrix(residue_list):
@@ -103,6 +104,7 @@ if __name__ == "__main__":
         k_matrix = force_constant.k_with_cutoff(distance_matrix)
         C = build_hessian(coordinate_matrix, k_matrix, distance_matrix)
         e_val, e_vec = diagonalize_hessian(C)
-        np.savetxt("1ALB_hessian", C, fmt="%9.5f")
-        np.savetxt("1ALB_evec.txt", e_vec, fmt="%9.5f")
-        np.savetxt("1ALB_eval.txt", e_val)
+        B_matrix = temperature_factors.calculate_temperature_factors(
+            residue_list_outer, e_val, e_vec
+        )
+        print(temperature_factors.calculate_correlation_coefficient(B_matrix))

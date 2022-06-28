@@ -1,3 +1,3 @@
 """
-Contains functions for creating iffernet output files.
+Contains functions for creating differnet output files.
 """
