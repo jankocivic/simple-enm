@@ -2,7 +2,6 @@
 Contains functions for performing normal mode analysis
 """
 import numpy as np
-import numba
 import pdb_tools as pdb
 import force_constant
 
@@ -18,7 +17,6 @@ def build_coordinate_matrix(residue_list):
     return coordinate_matrix
 
 
-@numba.jit(nopython=True)
 def build_distance_matrix(coordinate_matrix):
     """Creates a matrix of distances between the residues.
 
@@ -34,8 +32,15 @@ def build_distance_matrix(coordinate_matrix):
     return distance_matrix
 
 
-@numba.jit(nopython=True)
 def build_hessian_subblock(coordinates_i, coordinates_j, k_ij, d_ij):
+    """Creates the off-diagonal 3x3 subblock of the Hessian matrix.
+
+    :param coordinates_i: coordinates of residue i
+    :param coordinates_j: coordinates of residue j
+    :param k_ij: the ij element of the force constant matrix
+    :param d_ij: the distance between reisidue i and j
+    :return hessian_subblock: the 3x3 Hessian subblock between i and j
+    """
     if d_ij == 0:  # Only happens when residue i and j are the same
         hessian_subblock = np.zeros((3, 3))
     else:
@@ -46,19 +51,16 @@ def build_hessian_subblock(coordinates_i, coordinates_j, k_ij, d_ij):
     return hessian_subblock
 
 
-@numba.jit(nopython=True)
-def build_outer_supermatrix(coordinate_matrix, k_matrix, distance_matrix):
-    """Takes the (Nx3) coordinate matrix and creates a new (NxN) supermatrix
-    where each block [i * 3 : (i * 3 + 3), j * 3 : (j * 3 + 3)] is a (3x3) matrix created
-    from the outer product of the coordinates difference vector by itself,
-    where the coordinates difference vector is the difference between the coordinate
-    vector of residue j and residue i.
+def build_hessian(coordinate_matrix, k_matrix, distance_matrix):
+    """Creates the Hessian matrix. Each off-diagonal subblock is calculated by
+    the build_hessian_subblock function. The digaonal subblocks are negative
+    sums of all off-diagonal subblocks in the same row.
 
     :param coordinate_matrix: matrix whose rows are coordinates of each residue
-    :return outer_supermatrix: explained above
+    :return hessian: explained above
     """
     number_of_atoms = coordinate_matrix.shape[0]
-    outer_supermatrix = np.zeros((number_of_atoms * 3, number_of_atoms * 3))
+    hessian = np.zeros((number_of_atoms * 3, number_of_atoms * 3))
     # Calculating offdiagonal blocks
     for i in range(number_of_atoms - 1):
         for j in range(i + 1, number_of_atoms):
@@ -69,22 +71,38 @@ def build_outer_supermatrix(coordinate_matrix, k_matrix, distance_matrix):
                     k_matrix[i, j],
                     distance_matrix[i, j],
                 )
-                outer_supermatrix[i * 3 : (i * 3 + 3), j * 3 : (j * 3 + 3)] = subblock
-                outer_supermatrix[j * 3 : (j * 3 + 3), i * 3 : (i * 3 + 3)] = subblock
+                hessian[i * 3 : (i * 3 + 3), j * 3 : (j * 3 + 3)] = subblock
+                hessian[j * 3 : (j * 3 + 3), i * 3 : (i * 3 + 3)] = subblock
     # Calculating the diagonal blocks as sums of the offdiagonal blocks
     for i in range(number_of_atoms):
-        supermatrix_row = outer_supermatrix[i * 3 : (i * 3 + 3)]
-        outer_supermatrix[
-            i * 3 : (i * 3 + 3), i * 3 : (i * 3 + 3)
-        ] = -supermatrix_row.reshape(number_of_atoms, 3, 3).sum(axis=0)
-    return outer_supermatrix
+        hessian_row = hessian[i * 3 : (i * 3 + 3)]
+        hessian[i * 3 : (i * 3 + 3), i * 3 : (i * 3 + 3)] = -sum(
+            np.hsplit(hessian_row, number_of_atoms)
+        )
+    return hessian
+
+
+def diagonalize_hessian(hessian):
+    """
+    Finds eigenvalues and eigenvectors of the hessian matrix. Just
+    a wrapper for the numpy.linalg.eigh function.
+
+    :param hessian: the Hessian matrix
+    :return: array of eigenvalues in ascending order, array of eigenvectors
+             where column [i] is the eigenvector with eigenvalue [i]
+    """
+    return np.linalg.eigh(hessian)
 
 
 # Preliminary testing
 if __name__ == "__main__":
-    with open("1PKL.pdb", "r", encoding="utf-8") as file:
+    with open("1ALB.pdb", "r", encoding="utf-8") as file:
         residue_list_outer = pdb.parse_pdb_file(file)
         coordinate_matrix = build_coordinate_matrix(residue_list_outer)
         distance_matrix = build_distance_matrix(coordinate_matrix)
         k_matrix = force_constant.k_with_cutoff(distance_matrix)
-        C = build_outer_supermatrix(coordinate_matrix, k_matrix, distance_matrix)
+        C = build_hessian(coordinate_matrix, k_matrix, distance_matrix)
+        e_val, e_vec = diagonalize_hessian(C)
+        np.savetxt("1ALB_hessian", C, fmt="%9.5f")
+        np.savetxt("1ALB_evec.txt", e_vec, fmt="%9.5f")
+        np.savetxt("1ALB_eval.txt", e_val)
