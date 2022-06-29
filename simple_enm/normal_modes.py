@@ -97,14 +97,15 @@ def diagonalize_hessian(hessian):
 
 # Preliminary testing
 if __name__ == "__main__":
-    with open("1ALB.pdb", "r", encoding="utf-8") as file:
+    with open("1DUB.pdb", "r", encoding="utf-8") as file:
         residue_list_outer = pdb.parse_pdb_file(file)
-        coordinate_matrix = build_coordinate_matrix(residue_list_outer)
-        distance_matrix = build_distance_matrix(coordinate_matrix)
-        k_matrix = force_constant.k_with_cutoff(distance_matrix)
-        C = build_hessian(coordinate_matrix, k_matrix, distance_matrix)
+        coordinate_matrix_out = build_coordinate_matrix(residue_list_outer)
+        distance_matrix_out = build_distance_matrix(coordinate_matrix_out)
+        k_matrix_out = force_constant.k_with_cutoff(distance_matrix_out)
+        C = build_hessian(coordinate_matrix_out, k_matrix_out, distance_matrix_out)
         e_val, e_vec = diagonalize_hessian(C)
+
         B_matrix = temperature_factors.calculate_temperature_factors(
             residue_list_outer, e_val, e_vec
         )
-        print(temperature_factors.calculate_correlation_coefficient(B_matrix))
+        temperature_factors.calculate_correlation_coefficient(B_matrix)

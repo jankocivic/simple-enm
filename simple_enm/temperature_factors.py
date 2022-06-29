@@ -19,7 +19,7 @@ def calculate_rmsf(e_val, e_vec):
     :return rmsf: array of rmsf values for each coordinate
     """
     non_zero_e_val = e_val[6:]
-    non_zero_e_vec = e_vec[:, 6:]
+    non_zero_e_vec = e_vec[:, 6:] ** 2
     reciprocal_e_val_matrix = np.diag(1 / non_zero_e_val)
     rmsf = np.sum(non_zero_e_vec @ reciprocal_e_val_matrix, axis=1)
     return rmsf
@@ -36,6 +36,11 @@ def calculate_temperature_factors(residue_list, e_val, e_vec):
     :return temperature_factor_matrix: 2d array with the first and second rows
             are the normalized experimental and calculated temperature factors
     """
+    # Consider only the first 1000 non-zero normal modes
+    if np.size(e_val) > 1006:
+        e_val = e_val[:1006]
+        e_vec = e_vec[:, :1006]
+
     rmsf = calculate_rmsf(e_val, e_vec)
     number_of_residues = len(residue_list)
     experimental_temperature_factors = normalize(
