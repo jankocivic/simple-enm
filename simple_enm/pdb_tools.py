@@ -20,8 +20,8 @@ def parse_pdb_file(pdb_file):
 
 def select_chains(residue_list, chain_list):
     """Selects only particular protein chains from the list of all residues.
-    Modifies the list of residues and returns it. All chains are selected
-    if the list of chains is empty.
+    Modifies the list of residues and returns it. If the list of chains is empty,
+    all chains are selected.
 
     :param residue_list: list of all residues created by parse_pdb_file
     :param chains: a list with the selected protein chains
@@ -43,3 +43,33 @@ def remove_partial_occup(residue_list):
     """
     residue_list_mod = [residue for residue in residue_list if residue.occupancy == 1]
     return residue_list_mod
+
+
+def remove_unmatched(residue_list_0, residue_list_1, chain=True):
+    """Creates an interescentions between two residue lists in the correct order.
+    Creates new lists that contain the matched residues. The chain flag
+    determines if only one chain is present which affects the comparison.
+
+    :param residue_list_0, residue_list_1: lists of all residues created by the
+        parse_pdb_file function
+    :param chain: bool that determines the comparison criterion
+    :return (residue_list_0_mod, residue_list_1_mod): modified lists of residues
+        that contain only those residues that are present in both lists
+    """
+    residue_list_0_mod = []
+    residue_list_1_mod = []
+    if chain:
+        for residue_0 in residue_list_0:
+            for residue_1 in residue_list_1:
+                if residue_0.compare_within_chain(residue_1):
+                    residue_list_0_mod.append(residue_0)
+                    residue_list_1_mod.append(residue_1)
+                    break
+    else:
+        for residue_0 in residue_list_0:
+            for residue_1 in residue_list_1:
+                if residue_0.compare_overall(residue_1):
+                    residue_list_0_mod.append(residue_0)
+                    residue_list_1_mod.append(residue_1)
+                    break
+    return (residue_list_0_mod, residue_list_1_mod)

@@ -24,15 +24,31 @@ class Residue:
     def __str__(self):
         return f"{self.name} {self.chain} {self.residue_number} {self.coordinates} {self.occupancy} {self.exp_b_factor}"
 
+    def compare_within_chain(self, other):
+        """Compares if self is the same residue as other between two chains."""
+        if not isinstance(other, Residue):
+            raise TypeError("Object needs to be of type Residue")
+        return bool(
+            self.name == other.name and self.residue_number == other.residue_number
+        )
+
+    def compare_overall(self, other):
+        """Compares if self is the same residue when more chains are present"""
+        if not isinstance(other, Residue):
+            raise TypeError("Object needs to be of type Residue")
+        return bool(
+            self.name == other.name
+            and self.residue_number == other.residue_number
+            and self.chain == other.chain
+        )
+
 
 if __name__ == "__main__":
     LINE = "ATOM      1  N   CYS A   1       5.142 -15.550  79.040  1.00 39.01           N  "
     cys = Residue(LINE)
-    print(
-        cys.name,
-        cys.chain,
-        cys.residue_number,
-        cys.coordinates,
-        cys.occupancy,
-        cys.exp_b_factor,
-    )
+    print(cys)
+
+    LINE_a = "ATOM      1  N   CYS B   1       6.142 -15.550  89.040  1.00 29.01           N  "
+    cys_a = Residue(LINE_a)
+    print(cys_a)
+    print(cys.compare_within_chain(cys_a))

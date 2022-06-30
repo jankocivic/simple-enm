@@ -3,9 +3,6 @@ Module for calculating the overlap between normal modes and conformational
 changes.
 """
 import numpy as np
-from temperature_factors import calculate_correlation_coefficient
-from residue import Residue
-from normal_modes import build_coordinate_matrix
 
 
 def normalize(array):
