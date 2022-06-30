@@ -90,7 +90,7 @@ def diagonalize_hessian(hessian):
 
     :param hessian: the Hessian matrix
     :return: array of eigenvalues in ascending order, array of eigenvectors
-             where column [i] is the eigenvector with eigenvalue [i]
+        where column [i] is the eigenvector with eigenvalue [i]
     """
     return np.linalg.eigh(hessian)
 
@@ -99,6 +99,7 @@ def diagonalize_hessian(hessian):
 if __name__ == "__main__":
     with open("1DUB.pdb", "r", encoding="utf-8") as file:
         residue_list_outer = pdb.parse_pdb_file(file)
+
         coordinate_matrix_out = build_coordinate_matrix(residue_list_outer)
         distance_matrix_out = build_distance_matrix(coordinate_matrix_out)
         k_matrix_out = force_constant.k_with_cutoff(distance_matrix_out)

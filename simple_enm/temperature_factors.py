@@ -7,6 +7,8 @@ import numpy as np
 def normalize(array):
     """Normalizes an 1d array."""
     norm = np.linalg.norm(array)
+    if norm == 0:
+        return array
     return array / norm
 
 
