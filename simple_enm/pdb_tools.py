@@ -53,8 +53,10 @@ def remove_unmatched(residue_list_0, residue_list_1, chain=True):
     :param residue_list_0, residue_list_1: lists of all residues created by the
         parse_pdb_file function
     :param chain: bool that determines the comparison criterion
-    :return (residue_list_0_mod, residue_list_1_mod): modified lists of residues
-        that contain only those residues that are present in both lists
+    :return (residue_list_0_mod, residue_list_1_mod, num_removed_residues): 
+        modified lists of residues  that contain only those residues that are 
+        present in both lists together with the number of removed residues from
+        the first residue list
     """
     residue_list_0_mod = []
     residue_list_1_mod = []
@@ -72,4 +74,5 @@ def remove_unmatched(residue_list_0, residue_list_1, chain=True):
                     residue_list_0_mod.append(residue_0)
                     residue_list_1_mod.append(residue_1)
                     break
-    return (residue_list_0_mod, residue_list_1_mod)
+    num_removed_residues = len(residue_list_0) - len(residue_list_0_mod)
+    return (residue_list_0_mod, residue_list_1_mod, num_removed_residues)

@@ -166,7 +166,7 @@ def calc_overlaps(target_coord, model_coord, e_vec, n_modes=100):
     :param target_coord: coordinate matrix of the conformer
     :param model_coord: coordinate matrix for the model system for which the
         normal modes were calculated
-    :param e_vec: array where columns are individual eigenvectors is ascending
+    :param e_vec: array where columns are individual eigenvectors in ascending
         order calculated for the model system
     :param n_modes: number of normal modes for which the overlap is calculated
     :return (overlaps, rmsd): touple containing an 1D array containing all
@@ -174,6 +174,6 @@ def calc_overlaps(target_coord, model_coord, e_vec, n_modes=100):
     """
     target_coord = align_coordinates(target_coord, model_coord)
     coordinate_difference = calc_coordinate_difference(target_coord, model_coord)
-    n_modes = e_vec.shape()[1] if e_vec.shape()[1] <= n_modes else n_modes
+    n_modes = np.shape(e_vec)[1] if np.shape(e_vec)[1] <= n_modes else n_modes
     rmsd = calc_rmsd(coordinate_difference)
     return normalize(coordinate_difference) @ e_vec[:, :n_modes], rmsd

@@ -22,9 +22,9 @@ def main():
     pdb_file_path = os.path.join(os.getcwd(), f"PDB\\{PDB_FILE}")
     with open(pdb_file_path, "r") as file:
         residue_list = pdb_tools.parse_pdb_file(file)
-        print(residue_list[1])
 
     pdb_tools.select_chains(residue_list, chain_list=CHAINS)
+    pdb_tools.remove_partial_occup(residue_list)
 
     coordinate_matrix = normal_modes.build_coordinate_matrix(residue_list)
     distance_matrix = normal_modes.build_distance_matrix(coordinate_matrix)
@@ -38,6 +38,7 @@ def main():
         residue_list, e_val, e_vec
     )
     print(temperature_factors.calculate_correlation_coefficient(B_matrix))
+    return None
 
 
 if __name__ == "__main__":
