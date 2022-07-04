@@ -27,14 +27,15 @@ from simple_enm import (
 
 
 # INPUTS
-JOB_TITLE = f"{sys.argv[1]}_simple_9"  # Used for naming the output file folder
+JOB_TITLE = f"{sys.argv[1]}_simple_15"  # Used for naming the output file folder
 MODEL_CODE = sys.argv[1]  # The fifth letter in the pdb code indicates one chain
 TARGET_CODE = sys.argv[2]
 FORCE_CONSTANT = "SIMPLE"  # For now SIMPLE is the only option
-CUTOFF = 9  # Cutoff value in angstrems if the SIMPLE force constant was selected
+CUTOFF = 15  # Cutoff value in angstrems if the SIMPLE force constant was selected
 
 
 def main():
+    print("\n")
     # Reading the pdb files
     model_path = os.path.join(os.getcwd(), f"PDB\\{MODEL_CODE[:4]}.pdb")
     target_path = os.path.join(os.getcwd(), f"PDB\\{TARGET_CODE[:4]}.pdb")
@@ -70,6 +71,10 @@ def main():
         )
     number_of_residues = len(model_residues)
 
+    ########## TEMPORARY ###########
+    print(f"{MODEL_CODE} --> {TARGET_CODE}")
+    print(f"Number of removed residues: {num_removed_residues}")
+
     # Calculation of the normal modes for the model system
     model_coordinates = normal_modes.build_coordinate_matrix(model_residues)
 
@@ -78,6 +83,9 @@ def main():
 
     hessian = normal_modes.build_hessian(model_coordinates, k_matrix, distance_matrix)
     e_val, e_vec = normal_modes.diagonalize_hessian(hessian)
+
+    ########### TEMPORARY #############
+    print(f"Lowest eigenvalue: {e_val[6]}\n")
 
     # Calculation of the temperature factors
     temperature_factor_matrix = temperature_factors.calculate_temperature_factors(
@@ -114,6 +122,7 @@ def main():
         CUTOFF,
         temperature_factors_correlation,
         overlaps,
+        e_val,
     )
     output_file.b_plot(out_folder_path, MODEL_CODE, temperature_factor_matrix)
     output_file.overlap_plot(out_folder_path, MODEL_CODE, TARGET_CODE, overlaps)

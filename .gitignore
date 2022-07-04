@@ -1,2 +1,5 @@
 .vscode/
 enm_old/
+Scripts/Output/*
+Scripts/PDB/*
+Scripts/cryp*

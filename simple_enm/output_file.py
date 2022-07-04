@@ -66,6 +66,7 @@ def overlap_out(
     cutoff,
     b_corr,
     overlaps,
+    e_val,
 ):
     """To be added
     """
@@ -97,6 +98,7 @@ def overlap_out(
         file.write(f"{number_of_residues},")
         file.write(f"{number_of_removed},")
         file.write(f"{rmsd:.5f},")
+        file.write(f"{e_val[6]},")
         file.write(f"{max_overlap_mode},")
         file.write(f"{max_overlap:.5f},")
         file.write(f"{cum_overlap:.5f},")
