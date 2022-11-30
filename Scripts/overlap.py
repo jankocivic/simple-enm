@@ -16,6 +16,10 @@ Example: "python overlap.py 3CHEA 2IUZB"
 """
 import os
 import sys
+# Locating the simple_enm module
+sys.path.append("..\\")
+sys.path.append("..\\simple_enm")
+
 from simple_enm import (
     pdb_tools,
     normal_modes,

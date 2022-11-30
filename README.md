@@ -1,66 +1,63 @@
+# Simple ENM
 Short tutorial for using the python ENM program written by Janko Civic as part
 of the TCCM internship in the 2021/2022 academic year.
 
-1. The directory containing the program should contain the following:
-  - readme.txt
-  - Output  (Directory where the output files will be saved)
-  - PDB   (Directory where we store PDB files)
-  - enm_main.py
-  - motion_overlap.py
-  - enm.in
+Good resources to learn about theory of Elastic Network models:
+1. A
+2. B
+3. C
 
-2. The input file contains the following fields:
-  ```
-  Job_title:  (The name of the job that will be used for the output files)
-  PDB_file:  (The name of the pdb file for bulding the ENM)
-  PDB_folder:  (The path to the directory containing the PDB files)
-  Output_folder: (The path to the directory where the outputfiles will be saved)
-  Cutoff:  (The value of the cutoff for building the ENM)
-  Force-constant:  (Value of the force constant, should be left at 1)
-  Temp-factors:  ("True" if you want to calculate the temp-factors)
-  Overlap:  ("True" if you want to calculate the overlap with an other PDB file)
-  PDB_target:  (The name of the PDB file for which the overlaps will be calculated)
-  ```
-  Example input file:
-  ```
-  Job_title: 2hka_test
-  PDB_file:  2hka.pdb
-  PDB_folder: \home\janko\ENM_janko\PDB
-  Output_folder: \home\janko\ENM_janko\Output
-  Cutoff: 9
-  Force-constant: 1
-  Temp-factors: True
-  Overlap: True
-  PDB_target: 1nep.pdb 
-  ```
-3. The program requirers the following python modules: sys, os, numpy,
-  matplotlib, math
+## Setup
+1. Clone the github repository using the following command `git clone https://github.com/jankocivic/simple-enm.git`
+2. Navigate to the cloned directory
+3. Install the necessary dependencies in your local virtual environment
+  1. Using conda you can create the environemnt and install the dependencies in the same time with the following command `conda env create -f environment.yml` and activate the environment with `conda activate simple-enm`
+  2. If you don't have conda, create an environment and install the dependencies with `pip intall -r requirenments.txt` 
 
-3. To run the program cd to the directory containing the program files and
-   run it by typing `python enm_main.py enm.in`
+## Performing the calculations
+The program is able to calculate the normal modes of a single protein and compute overlaps between the normal modes and conformational changes. The necessary scripts are located in the Scripts folder. The necessary PDB files need to be saved in the PDB folder and the output files will be stored in the Output folder.
 
-4. The following output files are generated
-  - Output
-    - Job_title
-      - Job_title_general (General information about the calcualtion)
-      - Job_title_corr.txt (Correlation coefficient between temperature factors)
-      - Job_title_eigenvalues.txt (Normal mode eigenvalues)
-      - Job_title_eigenvectors.txt (First 30 eigenvectors)
-      - Job_title_eigenvectors.npy (Eigenvectors in .npy format)
-      - Job_title_rmsd (RMSD between two protein conformations)
-      - Job_title_indv_overlaps.txt (Overlap with the first 100 normal modes)
+### Normal modes
+1. Navigate to the Scripts directory
+2. Save the necessary PDB files in the PDB folder
+3. Run the calcualtion with the following command `python enm_modes.py TITLE PDB_ID`
+  - TITLE is the name of the directory where the output files are stored inside the Output folder
+  - PDB_ID is the 4 letter PDB identifier (read notes at the end about PDB files)
+4. The following output files are generated:
+  - eigenvalues.txt \- Eigenvalues in ascending order
+  - eigenvectors.txt \- The first 36 eigenvectors
+  - general.txt \- General information about the calcualtion
+  - normal_modes.nmd \- Files for visualizing the normal modes
+  - temperature_factors.png \- Plot of the normalized calcualted and experimental temeprature factors of residue
 
-      - Job_title_b_plot.png (Plot of the calculated and experimental b factors)
-      - Job_title_overlap.png (Plot of the individual overlaps)
-      - Job_title_cum_overlap.png (Plot of the cumulative overlaps)
-      
-      - Job_title_vib.nmd (File for visualizing the normal modes)
+### Overalp of normal modes and conformational changes 
+1. Navigate to the Scripts directory
+2. Save the necessary PDB files in the PDB folder
+3. Run the calcualtion with the following command `python overlap.py PDB_ID[CHAIN_ID] PDB_ID[CHAIN_ID]`
+  - first argument: PDB code of the model protein for which normal modes are calucluated
+  - second argument: PDB code of the conformer
+  - The PDB codes consist of 4 characters, but it is possible to append a fifth
+letter to specify an exact chain
+  - Change of the cutoff or the name of the output folder needs to be done manually
+4. The following output files are generated:
+  - eigenvalues.txt \- Eigenvalues in ascending order
+  - eigenvectors.txt \- The first 36 eigenvectors
+  - general.txt \- General information about the calcualtion
+  - normal_modes.nmd \- Files for visualizing the normal modes
+  - temperature_factors.png \- Plot of the normalized calcualted and experimental temeprature factors of residue
+  - cum_overlap.png \- Plot of the cummulative overlap of the first N lowest modes and the conformational change
+  - overlap.png \- Individual overlaps of each normal mode with the conformational change
+  - summary.txt \- csv file with the most important data
 
-5. To visualize the normal modes it is necessary to install VMD.
-  Open VMD and go to Extensions->Analysis->Normal Mode Wizard
-  Choose the option "Load NMD file" and open the generated .nmd file
-
-
+### Visualization
+1. Install VMD
+2. Open VMD and go to:
+   1. Extensions->
+   2. Analysis->
+   3. Normal Mode Wizard->
+   4. Load NMD file
+   5. Select the desired .nmd file
+   
 Remarks:
 1. PDB files:
   Should only contain one model (careful with NMR structures).
@@ -70,6 +67,3 @@ Remarks:
   primary sequance and not have too many missing residues.
   The program can run for more than 10 minutes for proteins with couple of
   thousand residues.
-2. Outputfiles:
-  The .npy file containing all the eigenvectors can become quite large for big
-  proteins.

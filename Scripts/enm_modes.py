@@ -2,15 +2,22 @@
 Script for calculating the normal modes of a protein. The script should be in a
 directory that contains a "PDB" and "Output" subdirectory. The pdb files should
 be located in the PDB directory and the output files will be saved in the Output
-directory.
+directory. The script also needs access to the simple_enm module. The default
+cutoff is set to 12 A and can be changed manually.
+
 It is necessary to specify two arguments:
 :first argument: job title that will be used to name the output folder
 :second argument: the PDB code of the protein
 
 Example: "python enm_modes.py test1 1ALB"
 """
+
 import os
 import sys
+# Locating the simple_enm module
+sys.path.append("..\\")
+sys.path.append("..\\simple_enm")
+
 from simple_enm import (
     pdb_tools,
     normal_modes,
