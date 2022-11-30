@@ -10,17 +10,19 @@ of the TCCM internship in the 2021/2022 academic year.
   - enm.in
 
 2. The input file contains the following fields:
-  Job_title  (The name of the job that will be used for the output files)
-  PDB_file  (The name of the pdb file for bulding the ENM)
-  PDB_folder  (The path to the directory containing the PDB files)
-  Output_folder (The path to the directory where the outputfiles will be saved)
-  Cutoff  (The value of the cutoff for building the ENM)
-  Force-constant  (Value of the force constant, should be left at 1)
-  Temp-factors  ("True" if you want to calculate the temp-factors)
-  Overlap  ("True" if you want to calculate the overlap with an other PDB file)
-  PDB_target  (The name of the PDB file for which the overlaps will be calculated)
-
-  Example of an input file:
+  ```
+  Job_title:  (The name of the job that will be used for the output files)
+  PDB_file:  (The name of the pdb file for bulding the ENM)
+  PDB_folder:  (The path to the directory containing the PDB files)
+  Output_folder: (The path to the directory where the outputfiles will be saved)
+  Cutoff:  (The value of the cutoff for building the ENM)
+  Force-constant:  (Value of the force constant, should be left at 1)
+  Temp-factors:  ("True" if you want to calculate the temp-factors)
+  Overlap:  ("True" if you want to calculate the overlap with an other PDB file)
+  PDB_target:  (The name of the PDB file for which the overlaps will be calculated)
+  ```
+  Example input file:
+  ```
   Job_title: 2hka_test
   PDB_file:  2hka.pdb
   PDB_folder: \home\janko\ENM_janko\PDB
@@ -29,13 +31,13 @@ of the TCCM internship in the 2021/2022 academic year.
   Force-constant: 1
   Temp-factors: True
   Overlap: True
-  PDB_target: 1nep.pdb
-
+  PDB_target: 1nep.pdb 
+  ```
 3. The program requirers the following python modules: sys, os, numpy,
   matplotlib, math
 
 3. To run the program cd to the directory containing the program files and
-   run it by typing "python enm_main.py enm.in"
+   run it by typing `python enm_main.py enm.in`
 
 4. The following output files are generated
   - Output
