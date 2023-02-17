@@ -16,6 +16,7 @@ import os
 import sys
 # Locating the simple_enm module
 module_path = os.path.join("..", "simple_enm")
+sys.path.append(os.path.join(".."))
 sys.path.append(module_path)
 
 from simple_enm import (
