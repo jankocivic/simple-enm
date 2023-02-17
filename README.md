@@ -57,7 +57,7 @@ letter to specify an exact chain
    4. Load NMD file
    5. Select the desired .nmd file
    
-Remarks:
+### Remarks
 - PDB files should only contain one model (careful with NMR structures)
 - All HETATM entries are ignored
 - Only Ca atoms with occupancy 1 are considered
