@@ -1,7 +1,0 @@
-Normal modes calculation
-PDB_file: 1ALB.pdb
-Chains: []
-Number of residues: 131
-Force_constant: SIMPLE
-Cutoff: 12
-Temperature factor correlation: 0.25467007344346265
