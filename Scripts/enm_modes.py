@@ -15,8 +15,8 @@ Example: "python enm_modes.py test1 1ALB"
 import os
 import sys
 # Locating the simple_enm module
-sys.path.append("..\\")
-sys.path.append("..\\simple_enm")
+module_path = os.path.join("..", "simple_enm")
+sys.path.append(module_path)
 
 from simple_enm import (
     pdb_tools,
@@ -36,7 +36,7 @@ CUTOFF = 12  # Cutoff value in angstrems if the SIMPLE force constant was select
 
 
 def main():
-    pdb_file_path = os.path.join(os.getcwd(), f"PDB\\{PDB_FILE}")
+    pdb_file_path = os.path.join(os.getcwd(), "PDB", PDB_FILE)
     with open(pdb_file_path, "r") as file:
         residue_list = pdb_tools.parse_pdb_file(file)
 
@@ -61,7 +61,7 @@ def main():
     )
 
     # Creating a subdirectory inside the general output folder
-    out_folder_path = os.path.join(os.getcwd(), f"Output\\{JOB_TITLE}")
+    out_folder_path = os.path.join(os.getcwd(), "Output", JOB_TITLE)
     try:
         os.mkdir(out_folder_path)
     except FileExistsError:

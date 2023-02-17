@@ -17,8 +17,8 @@ Example: "python overlap.py 3CHEA 2IUZB"
 import os
 import sys
 # Locating the simple_enm module
-sys.path.append("..\\")
-sys.path.append("..\\simple_enm")
+module_path = os.path.join("..", "simple_enm")
+sys.path.append(module_path)
 
 from simple_enm import (
     pdb_tools,
@@ -41,8 +41,8 @@ CUTOFF = 15  # Cutoff value in angstrems if the SIMPLE force constant was select
 def main():
     print("\n")
     # Reading the pdb files
-    model_path = os.path.join(os.getcwd(), f"PDB\\{MODEL_CODE[:4]}.pdb")
-    target_path = os.path.join(os.getcwd(), f"PDB\\{TARGET_CODE[:4]}.pdb")
+    model_path = os.path.join(os.getcwd(), "PDB", f"{MODEL_CODE[:4]}.pdb")
+    target_path = os.path.join(os.getcwd(), "PDB", f"{TARGET_CODE[:4]}.pdb")
     with open(model_path, "r") as file:
         model_residues = pdb_tools.parse_pdb_file(file)
     with open(target_path, "r") as file:
@@ -106,7 +106,7 @@ def main():
     )
 
     # Creating a subdirectory inside the general output folder
-    out_folder_path = os.path.join(os.getcwd(), f"Output\\{JOB_TITLE}")
+    out_folder_path = os.path.join(os.getcwd(), "Output", f"{JOB_TITLE}")
     try:
         os.mkdir(out_folder_path)
     except FileExistsError:
