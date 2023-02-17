@@ -13,7 +13,7 @@ Good resources to learn about the theory of Elastic Network Models:
    1. Using conda you can create the environemnt and install the dependencies in the same time with the following command `conda env create -f environment.yml` and activate the environment with `conda activate simple-enm`
    2. If you don't have conda, create an environment and install the dependencies with `pip install -r requirements.txt` 
 
-## Performing the calculations
+## Performing calculations
 The program is able to calculate the normal modes of a single protein and compute overlaps between the normal modes and conformational changes. The necessary scripts are located in the Scripts folder. The necessary PDB files need to be saved in the PDB folder and the output files will be stored in the Output folder.
 
 ### Normal modes

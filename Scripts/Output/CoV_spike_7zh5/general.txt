@@ -1,0 +1,7 @@
+Normal modes calculation
+PDB_file: 7zh5.pdb
+Chains: []
+Number of residues: 2792
+Force_constant: SIMPLE
+Cutoff: 12
+Temperature factor correlation: 0.5521643180436466
