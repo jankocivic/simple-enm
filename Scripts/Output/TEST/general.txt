@@ -1,0 +1,7 @@
+Normal modes calculation
+PDB_file: 1hka.pdb
+Chains: []
+Number of residues: 150
+Force_constant: SIMPLE
+Cutoff: 12
+Temperature factor correlation: 0.8436702374928049

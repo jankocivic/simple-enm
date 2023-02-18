@@ -1,0 +1,7 @@
+Normal modes calculation
+PDB_file: 2lao.pdb
+Chains: []
+Number of residues: 238
+Force_constant: SIMPLE
+Cutoff: 12
+Temperature factor correlation: 0.48798629230336593

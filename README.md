@@ -61,6 +61,7 @@ letter to specify an exact chain
 - PDB files should only contain one model (careful with NMR structures)
 - All HETATM entries are ignored
 - Only Ca atoms with occupancy 1 are considered
+- The program automatically performs structure allignment before the overlap calculation
 - When comparing two conformations the two PDB files need to have the same residue numbering
 - Too many missing residues can result in a disconnetcted graph causing the computaiton to fail
 - The program can run for more than 10 minutes for proteins with couple of thousand residues
